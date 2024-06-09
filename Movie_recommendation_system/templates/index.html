@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommender System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Movie Recommender System</h1>
+        <form id="movieForm" method="POST">
+            <label for="movie">Type or select a movie:</label>
+            <select id="movie" name="movie">
+                {% for movie in movie_list %}
+                <option value="{{ movie }}" {% if selected_movie == movie %}selected{% endif %}>{{ movie }}</option>
+                {% endfor %}
+            </select>
+            <div id="loader" class="loader">
+                <!-- <p>Loading recommendations...</p> -->
+            </div>
+            <button id="submitButton" type="submit">Show Recommendations<span id="loadingIndicator"></span></button>
+        </form>
+
+        {% if recommended_movie_names %}
+        <div class="recommendations">
+            {% for name, poster in zip(recommended_movie_names, recommended_movie_posters) %}
+            <div class="movie">
+                <img src="{{ poster }}" alt="{{ name }} poster">
+                <h2>{{ name }}</h2>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        document.getElementById('movieForm').addEventListener('submit', function() {
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('submitButton').disabled = true;
+            document.getElementById('submitButton').classList.add('loading');
+        });
+    </script>
+</body>
+</html>
